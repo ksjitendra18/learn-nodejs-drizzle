@@ -3,6 +3,9 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 
+// routes
+import userRoutes from "./routes/users";
+
 const app = express();
 dotenv.config();
 
@@ -17,6 +20,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 5000;
+
+app.use("/users", userRoutes);
 
 app.listen(PORT, () => {
   console.log(`App running on PORT ${PORT}`);
