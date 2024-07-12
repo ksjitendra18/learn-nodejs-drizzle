@@ -18,7 +18,7 @@ const updateUser = async (req: Request, res: Response) => {
         .status(400)
         .json({ success: false, message: "Please provide field to update" });
     }
-    if ((name && typeof name !== "string") || name.trim().length === 0) {
+    if ((name && typeof name !== "string") || name?.trim().length === 0) {
       return res
         .status(400)
         .json({ error: "validation_error", message: "Name is required" });

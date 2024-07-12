@@ -21,7 +21,7 @@ const getUser = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.status(200).json({ data: userById });
+    return res.status(200).json({ data: userById[0] });
   } catch (error) {
     console.log("Error while fetching user", error);
     return res
