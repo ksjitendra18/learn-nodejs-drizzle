@@ -5,30 +5,31 @@ import { db } from "../../db/setup";
 const createUser = async (req: Request, res: Response) => {
   const { name, email }: { name: string; email: string } = req.body;
 
-  if (!name) {
+  // basic validation
+  if (!name || typeof name !== "string" || name.trim().length === 0) {
     return res
       .status(400)
-      .json({ success: false, data: null, message: "Name is required" });
+      .json({ error: "validation_error", message: "Name is required" });
   }
-
-  if (!email) {
-    return res
-      .status(400)
-      .json({ success: false, data: null, message: "Email is required" });
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || typeof email !== "string" || !emailRegex.test(email.trim())) {
+    return res.status(400).json({
+      error: "validation_error",
+      message: "Email is missing or invalid",
+    });
   }
 
   try {
-    await db.insert(users).values({ name: name, email: email });
+    await db.insert(users).values({ name: name.trim(), email: email.trim() });
 
     return res.status(201).json({
-      success: true,
-      data: { name, email },
-      message: "Added Successfully",
+      message: "User added successfully",
     });
   } catch (error) {
+    console.log("Error while creating user", error);
     return res
       .status(500)
-      .json({ success: false, data: null, message: "Unable to add" });
+      .json({ error: "server_error", message: "Unable to add" });
   }
 };
 

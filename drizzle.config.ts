@@ -1,13 +1,13 @@
-import type { Config } from "drizzle-kit";
-import dotenv from "dotenv";
+import { defineConfig } from "drizzle-kit";
 
-dotenv.config();
-
-export default {
+if (!process.env.DB_URL) {
+  throw new Error("DB URL is missing");
+}
+export default defineConfig({
   schema: "./src/db/schema.ts",
   out: "./src/db/migrations",
   dbCredentials: {
-    connectionString: process.env.DB_URL!,
+    url: process.env.DB_URL,
   },
-  driver: "mysql2",
-} satisfies Config;
+  dialect: "mysql",
+});
